@@ -28,8 +28,7 @@ Finally, this project is also to showcase the **best practices** and **modern te
 - **API Endpoints** (for future integrations)
 - **Drag and Drop Support** (VueDraggable)
 - **Frontend & Backend Tests** (PestPHP & Playwright)
-- **Database Factories & Seeders** for Development
-- **CI/CD Pipeline** (GitLab CI/CD)
+- **Database Factories & Seeders** for 
 
 ---
 
