@@ -61,8 +61,15 @@ class BoardController extends Controller
         return Redirect::route('boards.index');
     }
 
-    public function show(Request $request, Board $board): Response
+    public function show(Request $request, Board $board): Response | RedirectResponse
     {
+        if ($board->user_id != auth()->id()) {
+            $memberIds = $board->invitations->pluck('guest.id');
+            if (! $memberIds->contains(auth()->id())) {
+                return Redirect::route('boards.index');
+            }
+        }
+
         $board->load([
             'tasks.assignedUser:id,name,email',
             'tasks.comments.user:id,name,email',
