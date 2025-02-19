@@ -81,8 +81,15 @@ class BoardController extends Controller
         ]);
     }
 
-    public function edit(Request $request, Board $board): Response
+    public function edit(Request $request, Board $board): Response | RedirectResponse
     {
+        if ($board->user_id != auth()->id()) {
+            $memberIds = $board->invitations->pluck('guest.id');
+            if (! $memberIds->contains(auth()->id())) {
+                return Redirect::route('boards.index');
+            }
+        }
+
         return Inertia::render('Boards/Edit', [
             'board' => BoardResource::make($board),
         ]);
@@ -108,6 +115,13 @@ class BoardController extends Controller
 
     public function acceptInvitation(Request $request, Board $board): RedirectResponse
     {
+        if ($board->user_id != auth()->id()) {
+            $memberIds = $board->invitations->pluck('guest.id');
+            if (! $memberIds->contains(auth()->id())) {
+                return Redirect::route('boards.index');
+            }
+        }
+
         $board->invitations()
             ->where('email', auth()->user()->email)
             ->where('status', 'pending')
