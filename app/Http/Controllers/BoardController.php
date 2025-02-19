@@ -108,6 +108,13 @@ class BoardController extends Controller
 
     public function invitations(Request $request, Board $board): Response
     {
+        if ($board->user_id != auth()->id()) {
+            $memberIds = $board->invitations->pluck('guest.id');
+            if (! $memberIds->contains(auth()->id())) {
+                return Redirect::route('boards.index');
+            }
+        }
+
         return Inertia::render('Boards/Invitations', [
             'board' => BoardResource::make($board),
         ]);
