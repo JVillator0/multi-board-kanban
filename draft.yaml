@@ -1,0 +1,153 @@
+models:
+  Board:
+    title: string
+    description: text nullable
+    order: integer default:1
+    relationships:
+      belongsTo: User
+      hasMany: Task, Invitation
+
+  Task:
+    title: string
+    description: text nullable
+    order: integer default:1
+    priority: enum:low,medium,high default:medium
+    status: enum:backlog,todo,in_progress,done default:backlog
+    due_date: timestamp nullable
+    relationships:
+      belongsTo: Board, User
+      hasMany: Comment
+
+  Comment:
+    content: text
+    relationships:
+      belongsTo: Task, User
+
+  Invitation:
+    email: string
+    status: enum:pending,accepted,declined default:pending
+    relationships:
+      belongsTo: User, Board
+
+controllers:
+  Board:
+    index:
+      query: where:user_id order:order
+      inertia: Boards/Index with:boards
+    create:
+      inertia: Boards/Create
+    store:
+      validate: title, description
+      save: board
+      inertia: Boards/Show with:board
+    show:
+      find: board
+      inertia: Boards/Show with:board
+    edit:
+      find: board
+      inertia: Boards/Edit with:board
+    update:
+      find: board
+      validate: title, description, order
+      update: board
+      inertia: Boards/Show with:board
+    reorder:
+      find: board
+      validate: order
+      update: board
+      inertia: Boards/Index with:boards
+    destroy:
+      find: board
+      delete: board
+      query: where:user_id order:order
+      inertia: Boards/Index with:boards
+
+  Task:
+    index:
+      validate: board_id exists:boards,id
+      query: where:board_id order:order
+      inertia: Boards/Tasks/Index with:tasks
+    store:
+      validate: title, description, order, priority, status, board_id
+      save: task
+      inertia: Boards/Tasks/Show with:task
+    update:
+      find: task
+      validate: title, description, order, priority, status
+      update: task
+      inertia: Boards/Tasks/Show with:task
+    reorder:
+      find: task
+      validate: order
+      update: task
+      inertia: Boards/Tasks/Index with:tasks
+    destroy:
+      find: task
+      delete: task
+      query: where:board_id order:order
+      inertia: Boards/Tasks/Index with:tasks
+
+  Comment:
+    store:
+      validate: content, task_id
+      save: comment
+      inertia: Boards/Tasks/Show with:comment.task_id
+    update:
+      find: comment
+      validate: content
+      update: comment
+      inertia: Boards/Tasks/Show with:comment.task_id
+    destroy:
+      find: comment
+      delete: comment
+      inertia: Boards/Tasks/Show with:comment.task_id
+
+  Invitation:
+    store:
+      validate: email, board_id
+      save: invitation
+      notify: board.invitation BoardInvitation with:board
+      inertia: Boards/Invitation/Index with:invitations
+    create:
+      inertia: Boards/Invitation/Create
+    destroy:
+      find: invitation
+      delete: invitation
+      query: where:board_id
+      inertia: Boards/Invitation/Index with:invitations
+    resend:
+      find: invitation
+      notify: board.invitation BoardInvitation with:board
+      respond: Boards/Invitation/Index with:invitations
+
+  Api/TaskController:
+    index:
+      respond: 200
+    update:
+      respond: 200
+    reorder:
+      respond: 200
+
+  Api/BoardController:
+    reorder:
+      respond: 200
+
+  Api/CommentController:
+    index:
+      respond: 201
+    store:
+      respond: 200
+    update:
+      respond: 200
+    destroy:
+      respond: 204
+
+  Api/InvitationController:
+    index:
+      respond: 200
+    store:
+      respond: 201
+    resend:
+      respond: 200
+    revoke:
+      respond: 204
