@@ -9,6 +9,10 @@ The goal of this project is to provide an **intuitive** and **collaborative** ta
 Finally, this project is also to showcase the **best practices** and **modern technologies** used in building a full-stack web application, including **testing**, and **real-time notifications**.
 
 ---
+### 🔗 Video Demo
+[![Watch the demo](./screenshot.png)](https://www.loom.com/share/51778e032055422db62c82e9eb10c471?sid=22952d4d-552c-4830-830f-053a6068a2c5)
+
+---
 
 ## Features
 
