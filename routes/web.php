@@ -2,33 +2,12 @@
 
 use App\Http\Controllers\BoardController;
 use App\Http\Controllers\ProfileController;
-use Illuminate\Foundation\Application;
+use App\Http\Controllers\TaskController;
+use Illuminate\Support\Facades\Broadcast;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
-
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/', fn () => Redirect::route('boards.index'));
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -51,6 +30,16 @@ Route::middleware('auth')->group(function () {
             Route::delete('/', [BoardController::class, 'destroy'])->name('destroy');
         });
     });
+
+    Route::prefix('tasks')->name('tasks.')->group(function () {
+        Route::post('/store', [TaskController::class, 'store'])->name('store');
+        Route::put('/{task}/update', [TaskController::class, 'update'])->name('update');
+        Route::delete('/{task}/destroy', [TaskController::class, 'destroy'])->name('destroy');
+    });
+});
+
+Route::middleware('auth:sanctum')->post('/broadcasting/auth', function () {
+    return Broadcast::auth(request());
 });
 
 require __DIR__.'/auth.php';

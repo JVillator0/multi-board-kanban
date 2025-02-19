@@ -3,29 +3,52 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\CommentIndexRequest;
+use App\Http\Requests\Api\CommentStoreRequest;
+use App\Http\Requests\Api\CommentUpdateRequest;
+use App\Http\Resources\CommentResource;
 use App\Models\Comment;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Illuminate\Http\JsonResponse;
 
 class CommentController extends Controller
 {
-    public function index(Request $request): Response
+    public function index(CommentIndexRequest $request): JsonResponse
     {
-        return response()->noContent(201);
+        $comments = Comment::query()
+            ->with('user:id,name,email')
+            ->where('task_id', $request->task_id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return response()->json(CommentResource::collection($comments));
     }
 
-    public function store(Request $request): Response
+    public function store(CommentStoreRequest $request): JsonResponse
     {
-        return response()->noContent(200);
+        $comment = Comment::create([
+            'task_id' => $request->task_id,
+            'user_id' => auth()->id(),
+            'content' => $request->content,
+        ]);
+
+        $comment->loadMissing('user');
+
+        return response()->json(CommentResource::make($comment), 201);
     }
 
-    public function update(Request $request, Comment $comment): Response
+    public function update(CommentUpdateRequest $request, Comment $comment): JsonResponse
     {
-        return response()->noContent(200);
+        $comment = tap($comment)->update($request->validated());
+
+        $comment->loadMissing('user');
+
+        return response()->json($comment);
     }
 
-    public function destroy(Request $request, Comment $comment): Response
+    public function destroy(Comment $comment): JsonResponse
     {
-        return response()->noContent();
+        $comment->delete();
+
+        return response()->json(['message' => 'Comment deleted.'], 200);
     }
 }

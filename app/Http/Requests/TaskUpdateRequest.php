@@ -22,11 +22,11 @@ class TaskUpdateRequest extends FormRequest
         return [
             'title' => ['required', 'string'],
             'description' => ['nullable', 'string'],
-            'order' => ['required', 'integer'],
+            'order' => ['nullable', 'integer'],
             'priority' => ['required', 'in:low,medium,high'],
             'status' => ['required', 'in:backlog,todo,in_progress,done'],
-            'assigned_user_id' => ['nullable', 'integer', 'exists:users,id'],
             'due_date' => ['nullable', 'date'],
+            'assigned_user_id' => ['nullable', 'integer', 'exists:users,id'],
         ];
     }
 }

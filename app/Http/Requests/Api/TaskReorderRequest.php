@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Api;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class BoardUpdateRequest extends FormRequest
+class TaskReorderRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -20,9 +20,9 @@ class BoardUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => ['required', 'string', 'max:255'],
-            'description' => ['nullable', 'string', 'max:255'],
-            'order' => ['nullable', 'integer'],
+            'tasks' => ['required', 'array', 'min:1'],
+            'tasks.*.id' => ['required', 'integer', 'exists:tasks,id'],
+            'tasks.*.order' => ['required', 'integer', 'min:0'],
         ];
     }
 }

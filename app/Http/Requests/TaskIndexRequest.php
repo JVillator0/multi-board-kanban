@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class BoardReorderRequest extends FormRequest
+class TaskIndexRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -20,7 +20,13 @@ class BoardReorderRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'title' => ['required', 'string'],
+            'description' => ['nullable', 'string'],
             'order' => ['required', 'integer'],
+            'priority' => ['required', 'in:low,medium,high'],
+            'status' => ['required', 'in:backlog,todo,in_progress,done'],
+            'board_id' => ['required', 'integer', 'exists:boards,id'],
+            'id' => ['required'],
         ];
     }
 }

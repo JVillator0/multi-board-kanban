@@ -19,7 +19,9 @@
     },
     "dependencies": {
         "@heroicons/vue": "^2.2.0",
+        "laravel-echo": "^2.0.2",
         "pinia": "^3.0.1",
+        "pusher-js": "^8.4.0",
         "vuedraggable": "^4.1.0"
     }
 }

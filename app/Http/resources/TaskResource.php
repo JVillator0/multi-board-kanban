@@ -23,8 +23,10 @@ class TaskResource extends JsonResource
             'status' => $this->status,
             'due_date' => $this->due_date?->format('Y-m-d'),
             'assigned_user_id' => $this->assigned_user_id,
+            'assigned_user' => new UserResource($this->whenLoaded('assignedUser')),
             'board_id' => $this->board_id,
             'board' => new BoardResource($this->whenLoaded('board')),
+            'comments' => CommentResource::collection($this->whenLoaded('comments')),
         ];
     }
 }
