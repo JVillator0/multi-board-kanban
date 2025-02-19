@@ -63,7 +63,7 @@ Finally, this project is also to showcase the **best practices** and **modern te
 Ensure you have the following installed:
 - Docker & Docker Compose (for Laravel Sail)
 - Node.js & npm
-- Composer (PHP dependency manager)
+- Composer (PHP dependency manager, optional)
 
 ### Clone Repository
 ```bash
@@ -131,9 +131,8 @@ npm run test:e2e
 ## Real-Time Notifications
 
 This system uses **WebSockets (Soketi)** for real-time updates. Notifications are sent when:
-1. A task is updated (status change, priority change, etc.)
+1. A task changes status
 2. A comment is added to a task
-3. An invitation is accepted or revoked
 
 ### Listening for Notifications (Frontend Example)
 ```js
