@@ -26,7 +26,6 @@ function toggleDropdown() {
     }
 }
 
-// Cerrar dropdown al hacer clic fuera
 function handleClickOutside(event) {
     if (dropdownRef.value && !dropdownRef.value.contains(event.target)) {
         isOpen.value = false
@@ -41,7 +40,7 @@ onMounted(() => {
     if (userId) {
         window.Echo.private(`App.Models.User.${userId}`)
             .notification((notification) => {
-                notificationsStore.addNotification(notification)
+                fetchNotifications()
             })
     }
 })
