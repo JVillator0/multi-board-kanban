@@ -84,7 +84,6 @@ async function confirmDelete() {
 
         <p v-if="error" class="mt-2 text-sm text-red-500">{{ error }}</p>
 
-        <!-- Modal de confirmación de eliminación -->
         <ConfirmModal
             :show="showDeleteModal"
             title="Delete Comment"

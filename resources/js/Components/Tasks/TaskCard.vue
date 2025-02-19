@@ -62,7 +62,6 @@ onUnmounted(() => {
 <template>
     <div @click="emit('edit', task, false)"
          class="relative p-4 bg-white rounded-lg shadow-sm cursor-pointer transition-all duration-200 hover:shadow-md hover:translate-y-[-2px] border border-gray-300">
-        <!-- Dropdown Menu Button -->
         <div class="absolute top-3 right-3" ref="dropdownRef">
             <button @click.stop="toggleMenu"
                     class="p-2 transition-colors duration-150 rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
@@ -70,7 +69,6 @@ onUnmounted(() => {
                 <EllipsisVerticalIcon class="w-5 h-5 text-gray-500" />
             </button>
 
-            <!-- Dropdown Menu -->
             <transition
                 enter-active-class="transition duration-100 ease-out"
                 enter-from-class="transform scale-95 opacity-0"
@@ -95,19 +93,16 @@ onUnmounted(() => {
             </transition>
         </div>
 
-        <!-- Task Content -->
         <div class="pr-8">
             <h3 class="text-lg font-semibold text-gray-800 line-clamp-1">{{ task.title }}</h3>
             <p class="mt-1 text-sm text-gray-600 line-clamp-2">{{ task.description || 'No description' }}</p>
 
-            <!-- Priority Badge -->
             <div class="flex flex-wrap items-center gap-2 mt-3">
                 <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium"
                       :class="priorityStore.getPriorityColor(task.priority)">
                     {{ priorityStore.getPriorityLabel(task.priority) }}
                 </span>
 
-                <!-- Due Date Badge -->
                 <span v-if="formattedDueDate"
                       class="inline-flex items-center px-2.5 py-1 text-xs font-medium rounded-full"
                       :class="isOverdue ? 'bg-red-100 text-red-800' : 'bg-gray-100 text-gray-800'">
@@ -116,7 +111,6 @@ onUnmounted(() => {
                 </span>
             </div>
 
-            <!-- Assigned User -->
             <div v-if="task.assigned_user" class="flex items-center gap-2 mt-3">
                 <div class="flex items-center justify-center w-6 h-6 text-sm font-medium text-indigo-700 bg-indigo-100 rounded-full">
                     {{ task.assigned_user.name.charAt(0).toUpperCase() }}

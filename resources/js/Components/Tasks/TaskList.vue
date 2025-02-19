@@ -171,7 +171,6 @@ watch(() => props.tasks, (newTasks) => {
                 </button>
             </div>
 
-            <!-- Drag and Drop con vuedraggable -->
             <draggable
                 v-model="taskList[status]"
                 :group="{ name: 'tasks', pull: true, put: true }"

@@ -79,7 +79,6 @@ onUnmounted(() => {
                 <EllipsisVerticalIcon class="w-5 h-5 text-gray-500" />
             </button>
 
-            <!-- Dropdown Menu -->
             <transition
                 enter-active-class="transition duration-100 ease-out"
                 enter-from-class="transform scale-95 opacity-0"
@@ -103,7 +102,6 @@ onUnmounted(() => {
             </transition>
         </div>
 
-        <!-- Resto del contenido... -->
         <h3 class="text-lg font-semibold text-gray-800">{{ board.title }}</h3>
         <p class="mt-2 text-sm text-gray-600">{{ board.description || 'No description' }}</p>
 
