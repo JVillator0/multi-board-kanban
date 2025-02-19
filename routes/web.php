@@ -36,3 +36,26 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+
+Route::get('boards/reorder', [App\Http\Controllers\BoardController::class, 'reorder']);
+Route::resource('boards', App\Http\Controllers\BoardController::class);
+
+Route::get('tasks/reorder', [App\Http\Controllers\TaskController::class, 'reorder']);
+Route::resource('tasks', App\Http\Controllers\TaskController::class)->except('create', 'edit', 'show');
+
+Route::resource('comments', App\Http\Controllers\CommentController::class)->only('store', 'update', 'destroy');
+
+Route::get('invitations/resend', [App\Http\Controllers\InvitationController::class, 'resend']);
+Route::resource('invitations', App\Http\Controllers\InvitationController::class)->only('store', 'create', 'destroy');
+
+Route::get('tasks/reorder', [App\Http\Controllers\Api\TaskController::class, 'reorder']);
+Route::resource('tasks', App\Http\Controllers\Api\TaskController::class)->only('index', 'update');
+
+Route::get('boards/reorder', [App\Http\Controllers\Api\BoardController::class, 'reorder']);
+
+Route::resource('comments', App\Http\Controllers\Api\CommentController::class)->except('create', 'edit', 'show');
+
+Route::get('invitations/resend', [App\Http\Controllers\Api\InvitationController::class, 'resend']);
+Route::get('invitations/revoke', [App\Http\Controllers\Api\InvitationController::class, 'revoke']);
+Route::resource('invitations', App\Http\Controllers\Api\InvitationController::class)->only('index', 'store');
