@@ -16,5 +16,10 @@
         "tailwindcss": "^3.2.1",
         "vite": "^5.0.0",
         "vue": "^3.4.0"
+    },
+    "dependencies": {
+        "@heroicons/vue": "^2.2.0",
+        "pinia": "^3.0.1",
+        "vuedraggable": "^4.1.0"
     }
 }

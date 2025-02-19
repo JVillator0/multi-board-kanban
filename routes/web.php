@@ -4,6 +4,7 @@ use App\Http\Controllers\BoardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TaskController;
 use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -35,10 +36,19 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::prefix('boards')->name('boards.')->group(function () {
+        Route::get('/', [BoardController::class, 'index'])->name('index');
+        Route::get('create', [BoardController::class, 'create'])->name('create');
+        Route::post('/', [BoardController::class, 'store'])->name('store');
+
+        Route::prefix('/{board}')->group(function () {
+            Route::get('/', [BoardController::class, 'show'])->name('show');
+            Route::get('/edit', [BoardController::class, 'edit'])->name('edit');
+            Route::put('/', [BoardController::class, 'update'])->name('update');
+            Route::delete('/', [BoardController::class, 'destroy'])->name('destroy');
+        });
+    });
 });
 
 require __DIR__.'/auth.php';
-
-Route::resource('boards', BoardController::class);
-
-Route::resource('tasks', TaskController::class)->except('create', 'edit', 'show');

@@ -6,7 +6,9 @@ use App\Http\Requests\BoardStoreRequest;
 use App\Http\Requests\BoardUpdateRequest;
 use App\Http\Resources\BoardResource;
 use App\Models\Board;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -36,17 +38,26 @@ class BoardController extends Controller
         return Inertia::render('Boards/Create');
     }
 
-    public function store(BoardStoreRequest $request): Response
+    public function store(BoardStoreRequest $request): RedirectResponse
     {
-        $board = Board::create($request->validated());
-
-        return Inertia::render('Boards/Show', [
-            'board' => BoardResource::make($board),
+        Board::create([
+            'user_id' => auth()->id(),
+            'title' => $request->title,
+            'description' => $request->description,
+            'order' => Board::where('user_id', auth()->id())->max('order') + 1,
         ]);
+
+        return Redirect::route('boards.index');
     }
 
     public function show(Request $request, Board $board): Response
     {
+        $board->load([
+            'tasks.assignedUser:id,name,email',
+            'tasks.comments.user:id,name,email',
+            'invitations.guest:id,name,email',
+        ]);
+
         return Inertia::render('Boards/Show', [
             'board' => BoardResource::make($board),
         ]);
@@ -59,23 +70,21 @@ class BoardController extends Controller
         ]);
     }
 
-    public function update(BoardUpdateRequest $request, Board $board): Response
+    public function update(BoardUpdateRequest $request, Board $board): RedirectResponse
     {
-        $board = tap($board)->update($request->validated());
-
-        return Inertia::render('Boards/Show', [
-            'board' => BoardResource::make($board),
+        $board->update([
+            'title' => $request->title,
+            'description' => $request->description,
+            'order' => $request->order ?? $board->order,
         ]);
+
+        return Redirect::route('boards.index');
     }
 
-    public function destroy(Request $request, Board $board): Response
+    public function destroy(Request $request, Board $board): RedirectResponse
     {
         $board->delete();
 
-        $boards = Board::where('user_id', auth()->id())->orderBy('order')->get();
-
-        return Inertia::render('Boards/Index', [
-            'boards' => BoardResource::collection($boards),
-        ]);
+        return Redirect::route('boards.index');
     }
 }
