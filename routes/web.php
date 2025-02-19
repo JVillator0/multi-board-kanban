@@ -4,6 +4,10 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Http\Controllers\TaskController;
+use App\Http\Controllers\BoardController;
+use App\Http\Controllers\InvitationController;
+use App\Http\Controllers\CommentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,24 +42,8 @@ Route::middleware('auth')->group(function () {
 require __DIR__.'/auth.php';
 
 
-Route::get('boards/reorder', [App\Http\Controllers\BoardController::class, 'reorder']);
-Route::resource('boards', App\Http\Controllers\BoardController::class);
+Route::get('boards/reorder', [BoardController::class, 'reorder']);
+Route::resource('boards', BoardController::class);
 
-Route::get('tasks/reorder', [App\Http\Controllers\TaskController::class, 'reorder']);
-Route::resource('tasks', App\Http\Controllers\TaskController::class)->except('create', 'edit', 'show');
-
-Route::resource('comments', App\Http\Controllers\CommentController::class)->only('store', 'update', 'destroy');
-
-Route::get('invitations/resend', [App\Http\Controllers\InvitationController::class, 'resend']);
-Route::resource('invitations', App\Http\Controllers\InvitationController::class)->only('store', 'create', 'destroy');
-
-Route::get('tasks/reorder', [App\Http\Controllers\Api\TaskController::class, 'reorder']);
-Route::resource('tasks', App\Http\Controllers\Api\TaskController::class)->only('index', 'update');
-
-Route::get('boards/reorder', [App\Http\Controllers\Api\BoardController::class, 'reorder']);
-
-Route::resource('comments', App\Http\Controllers\Api\CommentController::class)->except('create', 'edit', 'show');
-
-Route::get('invitations/resend', [App\Http\Controllers\Api\InvitationController::class, 'resend']);
-Route::get('invitations/revoke', [App\Http\Controllers\Api\InvitationController::class, 'revoke']);
-Route::resource('invitations', App\Http\Controllers\Api\InvitationController::class)->only('index', 'store');
+Route::get('tasks/reorder', [TaskController::class, 'reorder']);
+Route::resource('tasks', TaskController::class)->except('create', 'edit', 'show');

@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('invitations', function (Blueprint $table) {
             $table->id();
             $table->string('email');
-            $table->enum('status', ["pending","accepted","declined"])->default('pending');
-            $table->foreignId('user_id');
-            $table->foreignId('board_id');
+            $table->enum('status', ['pending', 'accepted', 'declined', 'revoked'])->default('pending');
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('board_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }

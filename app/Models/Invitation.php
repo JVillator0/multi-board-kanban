@@ -10,11 +10,6 @@ class Invitation extends Model
 {
     use HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
         'email',
         'status',
@@ -22,11 +17,6 @@ class Invitation extends Model
         'board_id',
     ];
 
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
     protected $casts = [
         'id' => 'integer',
         'user_id' => 'integer',
@@ -36,6 +26,11 @@ class Invitation extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function guest(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'email', 'email');
     }
 
     public function board(): BelongsTo

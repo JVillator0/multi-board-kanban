@@ -11,11 +11,6 @@ class Task extends Model
 {
     use HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
         'title',
         'description',
@@ -23,20 +18,15 @@ class Task extends Model
         'priority',
         'status',
         'due_date',
+        'assigned_user_id',
         'board_id',
-        'user_id',
     ];
 
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
     protected $casts = [
         'id' => 'integer',
-        'due_date' => 'timestamp',
         'board_id' => 'integer',
-        'user_id' => 'integer',
+        'order' => 'integer',
+        'due_date' => 'datetime:Y-m-d',
     ];
 
     public function board(): BelongsTo
@@ -44,13 +34,13 @@ class Task extends Model
         return $this->belongsTo(Board::class);
     }
 
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
-    }
-
     public function comments(): HasMany
     {
         return $this->hasMany(Comment::class);
+    }
+
+    public function assignedUser(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'assigned_user_id');
     }
 }
