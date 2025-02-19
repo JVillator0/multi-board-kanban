@@ -3,7 +3,9 @@
     "type": "module",
     "scripts": {
         "dev": "vite",
-        "build": "vite build"
+        "build": "vite build",
+        "test:e2e": "cross-env PLAYWRIGHT_BASE_URL=http://localhost playwright test",
+        "test:e2e:debug": "cross-env PLAYWRIGHT_BASE_URL=http://localhost playwright test --debug"
     },
     "devDependencies": {
         "@inertiajs/vue3": "^1.0.0",
@@ -11,6 +13,7 @@
         "@vitejs/plugin-vue": "^5.0.0",
         "autoprefixer": "^10.4.12",
         "axios": "^1.6.4",
+        "cross-env": "^7.0.3",
         "laravel-vite-plugin": "^1.0.0",
         "postcss": "^8.4.31",
         "tailwindcss": "^3.2.1",
@@ -19,6 +22,7 @@
     },
     "dependencies": {
         "@heroicons/vue": "^2.2.0",
+        "@playwright/test": "^1.50.1",
         "laravel-echo": "^2.0.2",
         "pinia": "^3.0.1",
         "pusher-js": "^8.4.0",
