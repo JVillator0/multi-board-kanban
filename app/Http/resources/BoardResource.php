@@ -21,6 +21,9 @@ class BoardResource extends JsonResource
             'order' => $this->order,
             'user_id' => $this->user_id,
             'user' => new UserResource($this->whenLoaded('user')),
+            ...$this->when($this->invitations, fn () => [
+                'members' => UserResource::collection($this->invitations->pluck('guest')),
+            ]),
         ];
     }
 }

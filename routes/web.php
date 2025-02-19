@@ -2,9 +2,7 @@
 
 use App\Http\Controllers\BoardController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\TaskController;
 use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -44,6 +42,10 @@ Route::middleware('auth')->group(function () {
 
         Route::prefix('/{board}')->group(function () {
             Route::get('/', [BoardController::class, 'show'])->name('show');
+            Route::prefix('invitations')->name('invitations.')->group(function () {
+                Route::get('/', [BoardController::class, 'invitations'])->name('index');
+                Route::middleware('signed')->get('/accept', [BoardController::class, 'acceptInvitation'])->name('accept');
+            });
             Route::get('/edit', [BoardController::class, 'edit'])->name('edit');
             Route::put('/', [BoardController::class, 'update'])->name('update');
             Route::delete('/', [BoardController::class, 'destroy'])->name('destroy');

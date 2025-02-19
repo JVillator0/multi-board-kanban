@@ -28,8 +28,19 @@ class BoardController extends Controller
                 'user_id',
             ]);
 
+        $sharedBoards = Board::query()
+            ->whereHas('invitations', fn ($query) => $query->where('email', auth()->user()->email)->where('status', 'accepted'))
+            ->with('invitations.guest:id,name,email')
+            ->get([
+                'id',
+                'title',
+                'description',
+                'order',
+            ]);
+
         return Inertia::render('Boards/Index', [
             'boards' => BoardResource::collection($boards),
+            'shared_boards' => BoardResource::collection($sharedBoards),
         ]);
     }
 
@@ -77,6 +88,24 @@ class BoardController extends Controller
             'description' => $request->description,
             'order' => $request->order ?? $board->order,
         ]);
+
+        return Redirect::route('boards.index');
+    }
+
+    public function invitations(Request $request, Board $board): Response
+    {
+        return Inertia::render('Boards/Invitations', [
+            'board' => BoardResource::make($board),
+        ]);
+    }
+
+    public function acceptInvitation(Request $request, Board $board): RedirectResponse
+    {
+        $board->invitations()
+            ->where('email', auth()->user()->email)
+            ->where('status', 'pending')
+            ->first(['id', 'status'])
+            ?->update(['status' => 'accepted']);
 
         return Redirect::route('boards.index');
     }

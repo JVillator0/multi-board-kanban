@@ -93,6 +93,9 @@ onUnmounted(() => {
                     <DropdownLink :href="route('boards.edit', board.id)" @click.stop>
                         Edit Board
                     </DropdownLink>
+                    <DropdownLink :href="route('boards.invitations.index', board.id)" @click.stop>
+                        Manage Members
+                    </DropdownLink>
                     <DropdownButton @click.stop="deleteBoard(board.id)">
                         Delete Board
                     </DropdownButton>
@@ -105,7 +108,27 @@ onUnmounted(() => {
         <p class="mt-2 text-sm text-gray-600">{{ board.description || 'No description' }}</p>
 
         <div class="mt-4">
-            <!-- ... código de los miembros ... -->
+            <p class="text-sm font-semibold text-gray-700">
+                Members:
+            </p>
+            <div class="flex items-center mt-2">
+                <div class="flex -space-x-2">
+                    <template v-for="(member, index) in board.members.slice(0, 3)" :key="member.id">
+                        <div :class="['relative flex items-center justify-center w-8 h-8 text-white rounded-full', getColor(member.name)]" :title="member.name">
+                            {{ member.name.charAt(0).toUpperCase() }}
+                        </div>
+                    </template>
+                </div>
+
+                <div v-if="board.members.length > 3" class="relative ml-2 group">
+                    <span class="flex items-center justify-center w-8 h-8 text-sm font-semibold text-gray-700 bg-gray-300 rounded-full cursor-pointer">
+                        +{{ board.members.length - 3 }}
+                    </span>
+                    <div class="absolute left-0 z-10 hidden p-2 mt-1 text-sm text-gray-700 bg-white border rounded-lg shadow-lg group-hover:block">
+                        <p v-for="member in board.members.slice(3)" :key="member.id" class="px-2 py-1">{{ member.name }}</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 

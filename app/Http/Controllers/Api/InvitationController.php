@@ -3,28 +3,74 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\InvitationIndexRequest;
+use App\Http\Requests\Api\InvitationStoreRequest;
+use App\Http\Resources\InvitationResource;
+use App\Models\Invitation;
+use App\Models\User;
+use App\Notifications\BoardInvitationNotification;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Notification;
 
 class InvitationController extends Controller
 {
-    public function index(Request $request): Response
+    public function index(InvitationIndexRequest $request)
     {
-        return response()->noContent(200);
+        $records = Invitation::where('board_id', $request->board_id)->get([
+            'id',
+            'email',
+            'status',
+        ]);
+
+        return response()->json(InvitationResource::collection($records));
     }
 
-    public function store(Request $request): Response
+    public function store(InvitationStoreRequest $request)
     {
-        return response()->noContent(201);
+        $invitation = Invitation::firstOrCreate([
+            'email' => $request->email,
+            'board_id' => $request->board_id,
+        ], [
+            'status' => 'pending',
+            'user_id' => auth()->id(),
+        ]);
+
+        if ($invitation->status === 'accepted') {
+            return response()->json(['message' => 'Invitation already accepted'], 400);
+        }
+
+        $existingUser = User::where('email', $request->email)->value('id');
+
+        Notification::route('mail', $request->email)->notify(new BoardInvitationNotification(
+            $invitation,
+            $existingUser !== null
+        ));
+
+        return response()->json(['message' => 'Invitation sent successfully']);
     }
 
-    public function resend(Request $request): Response
+    public function resend(Request $request, Invitation $invitation)
     {
-        return response()->noContent(200);
+        if ($invitation->status === 'accepted') {
+            return response()->json(['message' => 'Cannot resend an accepted invitation'], 400);
+        }
+
+        $existingUser = User::where('email', $invitation->email)->exists();
+
+        $invitation->update(['status' => 'pending']);
+
+        Notification::route('mail', $invitation->email)->notify(new BoardInvitationNotification(
+            $invitation,
+            $existingUser
+        ));
+
+        return response()->json(['message' => 'Invitation resent successfully']);
     }
 
-    public function revoke(Request $request): Response
+    public function revoke(Request $request, Invitation $invitation)
     {
-        return response()->noContent();
+        $invitation->update(['status' => 'revoked']);
+
+        return response()->json(['message' => 'Invitation revoked successfully']);
     }
 }
