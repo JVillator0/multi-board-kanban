@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Listeners\AcceptInvitationAfterRegistration;
 use App\Listeners\SendEmailVerificationNotification;
+use App\Models\Comment;
+use App\Models\Task;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Event;
@@ -27,7 +29,8 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Comment::observe(\App\Observers\CommentObserver::class);
+        Task::observe(\App\Observers\TaskObserver::class);
     }
 
     /**

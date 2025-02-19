@@ -13,7 +13,7 @@ export const useNotificationStore = defineStore('notification', () => {
 
         setTimeout(() => {
             show.value = false
-        }, 5000) // 5 seconds
+        }, 60000) // 3 seconds
     }
 
     return { message, type, show, notify }
