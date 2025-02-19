@@ -25,6 +25,8 @@ class TaskStoreRequest extends FormRequest
             'order' => ['required', 'integer'],
             'priority' => ['required', 'in:low,medium,high'],
             'status' => ['required', 'in:backlog,todo,in_progress,done'],
+            'assigned_user_id' => ['nullable', 'integer', 'exists:users,id'],
+            'due_date' => ['nullable', 'date'],
             'board_id' => ['required', 'integer', 'exists:boards,id'],
         ];
     }

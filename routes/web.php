@@ -39,8 +39,6 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 
-Route::get('boards/reorder', [BoardController::class, 'reorder']);
 Route::resource('boards', BoardController::class);
 
-Route::get('tasks/reorder', [TaskController::class, 'reorder']);
 Route::resource('tasks', TaskController::class)->except('create', 'edit', 'show');

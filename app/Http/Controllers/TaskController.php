@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\TaskIndexRequest;
-use App\Http\Requests\TaskReorderRequest;
 use App\Http\Requests\TaskStoreRequest;
 use App\Http\Requests\TaskUpdateRequest;
 use App\Models\Task;
@@ -15,7 +14,7 @@ class TaskController extends Controller
 {
     public function index(TaskIndexRequest $request): Response
     {
-        $tasks = Task::where('board_id', $board_id)->orderBy('order')->get();
+        $tasks = Task::where('board_id', $request->board_id)->orderBy('order')->get();
 
         return Inertia::render('Boards/Tasks/Index', [
             'tasks' => $tasks,
@@ -42,24 +41,11 @@ class TaskController extends Controller
         ]);
     }
 
-    public function reorder(TaskReorderRequest $request): Response
-    {
-        $task = Task::find($task);
-
-        $task->update($request->validated());
-
-        return Inertia::render('Boards/Tasks/Index', [
-            'tasks' => $tasks,
-        ]);
-    }
-
     public function destroy(Request $request, Task $task): Response
     {
-        $task = Task::find($task);
-
         $task->delete();
 
-        $tasks = Task::where('board_id', $board_id)->orderBy('order')->get();
+        $tasks = Task::where('board_id', $task->board->id)->orderBy('order')->get();
 
         return Inertia::render('Boards/Tasks/Index', [
             'tasks' => $tasks,

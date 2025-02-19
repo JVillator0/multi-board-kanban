@@ -20,15 +20,7 @@ class TaskIndexRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => ['required', 'string'],
-            'description' => ['nullable', 'string'],
-            'order' => ['required', 'integer'],
-            'priority' => ['required', 'in:low,medium,high'],
-            'status' => ['required', 'in:backlog,todo,in_progress,done'],
-            'due_date' => ['nullable'],
             'board_id' => ['required', 'integer', 'exists:boards,id'],
-            'user_id' => ['required', 'integer', 'exists:users,id'],
-            'id' => ['required'],
         ];
     }
 }

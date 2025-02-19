@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\BoardReorderRequest;
 use App\Http\Requests\BoardStoreRequest;
 use App\Http\Requests\BoardUpdateRequest;
+use App\Http\Resources\BoardResource;
 use App\Models\Board;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -14,10 +14,20 @@ class BoardController extends Controller
 {
     public function index(Request $request): Response
     {
-        $boards = Board::where('user_id', $user_id)->orderBy('order')->get();
+        $boards = Board::query()
+            ->where('user_id', auth()->id())
+            ->with('invitations.guest:id,name,email')
+            ->orderBy('order')
+            ->get([
+                'id',
+                'title',
+                'description',
+                'order',
+                'user_id',
+            ]);
 
         return Inertia::render('Boards/Index', [
-            'boards' => $boards,
+            'boards' => BoardResource::collection($boards),
         ]);
     }
 
@@ -31,60 +41,41 @@ class BoardController extends Controller
         $board = Board::create($request->validated());
 
         return Inertia::render('Boards/Show', [
-            'board' => $board,
+            'board' => BoardResource::make($board),
         ]);
     }
 
     public function show(Request $request, Board $board): Response
     {
-        $board = Board::find($board);
-
         return Inertia::render('Boards/Show', [
-            'board' => $board,
+            'board' => BoardResource::make($board),
         ]);
     }
 
     public function edit(Request $request, Board $board): Response
     {
-        $board = Board::find($board);
-
         return Inertia::render('Boards/Edit', [
-            'board' => $board,
+            'board' => BoardResource::make($board),
         ]);
     }
 
     public function update(BoardUpdateRequest $request, Board $board): Response
     {
-        $board = Board::find($board);
-
-        $board->update($request->validated());
+        $board = tap($board)->update($request->validated());
 
         return Inertia::render('Boards/Show', [
-            'board' => $board,
-        ]);
-    }
-
-    public function reorder(BoardReorderRequest $request): Response
-    {
-        $board = Board::find($board);
-
-        $board->update($request->validated());
-
-        return Inertia::render('Boards/Index', [
-            'boards' => $boards,
+            'board' => BoardResource::make($board),
         ]);
     }
 
     public function destroy(Request $request, Board $board): Response
     {
-        $board = Board::find($board);
-
         $board->delete();
 
-        $boards = Board::where('user_id', $user_id)->orderBy('order')->get();
+        $boards = Board::where('user_id', auth()->id())->orderBy('order')->get();
 
         return Inertia::render('Boards/Index', [
-            'boards' => $boards,
+            'boards' => BoardResource::collection($boards),
         ]);
     }
 }
