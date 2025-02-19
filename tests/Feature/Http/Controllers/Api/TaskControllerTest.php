@@ -19,7 +19,6 @@ final class TaskControllerTest extends TestCase
         $response->assertOk();
     }
 
-
     #[Test]
     public function update_responds_with(): void
     {
@@ -29,7 +28,6 @@ final class TaskControllerTest extends TestCase
 
         $response->assertOk();
     }
-
 
     #[Test]
     public function reorder_responds_with(): void

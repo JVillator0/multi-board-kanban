@@ -52,7 +52,6 @@ final class TaskControllerTest extends TestCase
         ]);
     }
 
-
     #[Test]
     public function store_uses_form_request_validation(): void
     {
@@ -94,7 +93,6 @@ final class TaskControllerTest extends TestCase
         $task = $tasks->first();
     }
 
-
     #[Test]
     public function update_uses_form_request_validation(): void
     {
@@ -132,7 +130,6 @@ final class TaskControllerTest extends TestCase
         $this->assertEquals($status, $task->status);
     }
 
-
     #[Test]
     public function reorder_uses_form_request_validation(): void
     {
@@ -157,7 +154,6 @@ final class TaskControllerTest extends TestCase
 
         $this->assertEquals($order, $task->order);
     }
-
 
     #[Test]
     public function destroy_deletes(): void

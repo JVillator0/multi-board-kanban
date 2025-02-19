@@ -24,13 +24,11 @@ final class BoardControllerTest extends TestCase
         $response = $this->get(route('boards.index'));
     }
 
-
     #[Test]
     public function create_behaves_as_expected(): void
     {
         $response = $this->get(route('boards.create'));
     }
-
 
     #[Test]
     public function store_uses_form_request_validation(): void
@@ -61,7 +59,6 @@ final class BoardControllerTest extends TestCase
         $board = $boards->first();
     }
 
-
     #[Test]
     public function show_behaves_as_expected(): void
     {
@@ -70,7 +67,6 @@ final class BoardControllerTest extends TestCase
         $response = $this->get(route('boards.show', $board));
     }
 
-
     #[Test]
     public function edit_behaves_as_expected(): void
     {
@@ -78,7 +74,6 @@ final class BoardControllerTest extends TestCase
 
         $response = $this->get(route('boards.edit', $board));
     }
-
 
     #[Test]
     public function update_uses_form_request_validation(): void
@@ -111,7 +106,6 @@ final class BoardControllerTest extends TestCase
         $this->assertEquals($order, $board->order);
     }
 
-
     #[Test]
     public function reorder_uses_form_request_validation(): void
     {
@@ -136,7 +130,6 @@ final class BoardControllerTest extends TestCase
 
         $this->assertEquals($order, $board->order);
     }
-
 
     #[Test]
     public function destroy_deletes(): void

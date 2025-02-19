@@ -19,7 +19,6 @@ final class CommentControllerTest extends TestCase
         $response->assertNoContent(201);
     }
 
-
     #[Test]
     public function store_responds_with(): void
     {
@@ -27,7 +26,6 @@ final class CommentControllerTest extends TestCase
 
         $response->assertOk();
     }
-
 
     #[Test]
     public function update_responds_with(): void
@@ -38,7 +36,6 @@ final class CommentControllerTest extends TestCase
 
         $response->assertOk();
     }
-
 
     #[Test]
     public function destroy_responds_with(): void

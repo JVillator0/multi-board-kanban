@@ -2,11 +2,10 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 use App\Models\Board;
 use App\Models\Invitation;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class InvitationFactory extends Factory
 {
@@ -24,7 +23,7 @@ class InvitationFactory extends Factory
     {
         return [
             'email' => fake()->safeEmail(),
-            'status' => fake()->randomElement(["pending","accepted","declined"]),
+            'status' => fake()->randomElement(['pending', 'accepted', 'declined']),
             'user_id' => User::factory(),
             'board_id' => Board::factory(),
         ];

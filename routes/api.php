@@ -1,11 +1,11 @@
 <?php
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\InvitationController;
-use App\Http\Controllers\Api\TaskController;
 use App\Http\Controllers\Api\BoardController;
 use App\Http\Controllers\Api\CommentController;
+use App\Http\Controllers\Api\InvitationController;
+use App\Http\Controllers\Api\TaskController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------

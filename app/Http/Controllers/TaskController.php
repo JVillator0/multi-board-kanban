@@ -35,7 +35,6 @@ class TaskController extends Controller
     {
         $task = Task::find($task);
 
-
         $task->update($request->validated());
 
         return Inertia::render('Boards/Tasks/Show', [
@@ -46,7 +45,6 @@ class TaskController extends Controller
     public function reorder(TaskReorderRequest $request): Response
     {
         $task = Task::find($task);
-
 
         $task->update($request->validated());
 

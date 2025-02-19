@@ -57,7 +57,6 @@ class BoardController extends Controller
     {
         $board = Board::find($board);
 
-
         $board->update($request->validated());
 
         return Inertia::render('Boards/Show', [
@@ -68,7 +67,6 @@ class BoardController extends Controller
     public function reorder(BoardReorderRequest $request): Response
     {
         $board = Board::find($board);
-
 
         $board->update($request->validated());
 

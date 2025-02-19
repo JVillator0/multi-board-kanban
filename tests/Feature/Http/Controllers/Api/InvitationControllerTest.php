@@ -18,7 +18,6 @@ final class InvitationControllerTest extends TestCase
         $response->assertOk();
     }
 
-
     #[Test]
     public function store_responds_with(): void
     {
@@ -27,7 +26,6 @@ final class InvitationControllerTest extends TestCase
         $response->assertNoContent(201);
     }
 
-
     #[Test]
     public function resend_responds_with(): void
     {
@@ -35,7 +33,6 @@ final class InvitationControllerTest extends TestCase
 
         $response->assertOk();
     }
-
 
     #[Test]
     public function revoke_responds_with(): void

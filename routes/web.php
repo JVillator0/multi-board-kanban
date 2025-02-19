@@ -1,13 +1,11 @@
 <?php
 
+use App\Http\Controllers\BoardController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TaskController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use App\Http\Controllers\TaskController;
-use App\Http\Controllers\BoardController;
-use App\Http\Controllers\InvitationController;
-use App\Http\Controllers\CommentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,7 +38,6 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
-
 
 Route::get('boards/reorder', [BoardController::class, 'reorder']);
 Route::resource('boards', BoardController::class);

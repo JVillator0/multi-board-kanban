@@ -46,7 +46,6 @@ final class CommentControllerTest extends TestCase
         $comment = $comments->first();
     }
 
-
     #[Test]
     public function update_uses_form_request_validation(): void
     {
@@ -71,7 +70,6 @@ final class CommentControllerTest extends TestCase
 
         $this->assertEquals($content, $comment->content);
     }
-
 
     #[Test]
     public function destroy_deletes(): void
