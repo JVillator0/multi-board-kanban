@@ -27,9 +27,9 @@ class TaskFactory extends Factory
             'order' => fake()->numberBetween(-10000, 10000),
             'priority' => fake()->randomElement(['low', 'medium', 'high']),
             'status' => fake()->randomElement(['backlog', 'todo', 'in_progress', 'done']),
-            'due_date' => fake()->dateTime(),
+            'due_date' => fake()->dateTimeBetween('now', '+1 year'),
+            'assigned_user_id' => User::factory(),
             'board_id' => Board::factory(),
-            'user_id' => User::factory(),
         ];
     }
 }

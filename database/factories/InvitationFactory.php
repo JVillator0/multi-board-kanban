@@ -21,9 +21,11 @@ class InvitationFactory extends Factory
      */
     public function definition(): array
     {
+        $user = User::factory()->create();
+
         return [
-            'email' => fake()->safeEmail(),
-            'status' => fake()->randomElement(['pending', 'accepted', 'declined']),
+            'email' => $user->email,
+            'status' => fake()->randomElement(['pending', 'accepted', 'declined', 'revoked']),
             'user_id' => User::factory(),
             'board_id' => Board::factory(),
         ];
